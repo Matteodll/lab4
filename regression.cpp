@@ -9,12 +9,10 @@ void Regression::add(double x, double y) { points_.push_back({x, y}); }
 
 bool Regression::remove(double x, double y) {
   Point p_rm{x, y};
-  for (auto p_it = points_.begin(), p_end = points_.end(); p_it != p_end;
-       ++p_it) {
-    if ((*p_it) == p_rm) {
-      points_.erase(p_it);
-      return true;
-    }
+  auto p_it = std::find(begin(points_), end(points_), p_rm);
+  if (p_it != std::end(points_)) {
+    points_.erase(p_it);
+    return true;
   }
   return false;
 }
