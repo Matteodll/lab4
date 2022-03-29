@@ -1,8 +1,7 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
-#include "regression.hpp"
-
 #include "doctest.h"
+#include "regression.hpp"
 
 TEST_CASE("Testing Regression") {
   Regression reg;
@@ -47,5 +46,35 @@ TEST_CASE("Testing Regression") {
     auto result = reg.fit();
     CHECK(result.A == doctest::Approx(1.2).epsilon(0.01));
     CHECK(result.B == doctest::Approx(0.9).epsilon(0.01));
+  }
+
+  SUBCASE("Checking remove on existing point") {
+    reg.add(2.1, 3.2);
+    reg.add(1., 2.);
+    CHECK(reg.remove(2.1, 3.2) == true);
+  }
+
+  SUBCASE("checking remove not existing point") {
+    reg.add(2.1, 3.2);
+    reg.add(6.9, 7.3);
+    reg.add(2.2, 3.0);
+    reg.add(0.1, 1.3);
+    reg.add(4.7, 5.6);
+    CHECK(reg.remove(7.3, 2.) == false);
+  }
+
+  SUBCASE("checking remove on not existing point same x y inverted") {
+    reg.add(1., 2.);
+    CHECK(reg.remove(2., 1.) == false);
+  }
+
+  SUBCASE("checking remove on points with same x") {
+    reg.add(1., 2.);
+    CHECK(reg.remove(1., 4.) == false);
+  }
+
+  SUBCASE("checking remove on points with same y") {
+    reg.add(1., 2.);
+    CHECK(reg.remove(3., 2.) == false);
   }
 }

@@ -8,11 +8,13 @@ struct Result {
   double B;
 };
 
-
 class Regression {
   struct Point {
     double x;
     double y;
+    bool operator==(Point const& other) {
+      return (this->x == other.x) && (this->y == other.y);
+    }
   };
 
   std::vector<Point> points_{};
@@ -20,9 +22,10 @@ class Regression {
  public:
   int size() const;
   void add(double x, double y);
+  bool remove(double x, double y);
   Result fit() const;
 };
 
-Result fit(Regression const &reg);
+Result fit(Regression const& reg);
 
 #endif

@@ -1,11 +1,22 @@
 #include "regression.hpp"
 
+#include <algorithm>
 #include <stdexcept>
 
 int Regression::size() const { return points_.size(); }
 
-void Regression::add(double x, double y) {
-  points_.push_back({x,y});
+void Regression::add(double x, double y) { points_.push_back({x, y}); }
+
+bool Regression::remove(double x, double y) {
+  Point p_rm{x, y};
+  for (auto p_it = points_.begin(), p_end = points_.end(); p_it != p_end;
+       ++p_it) {
+    if ((*p_it) == p_rm) {
+      points_.erase(p_it);
+      return true;
+    }
+  }
+  return false;
 }
 
 Result Regression::fit() const {
@@ -36,7 +47,7 @@ Result Regression::fit() const {
   return {a, b};
 }
 
-Result fit(Regression const &reg) {
+Result fit(Regression const& reg) {
   // the following call would fail compilation if the fit method weren't const
   return reg.fit();
 }
